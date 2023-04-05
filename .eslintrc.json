@@ -3,11 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "standard-with-typescript",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "extends": ["standard-with-typescript", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "overrides": [],
   "plugins": ["@typescript-eslint", "import", "prettier"],
   "parserOptions": {
@@ -19,12 +15,17 @@
     "eqeqeq": "off",
     "no-unused-vars": "warn",
     "no-trailing-spaces": 0,
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
     "multiline-ternary": 0,
+    "@typescript-eslint/no-unused-expressions": "off",
     "no-multiple-empty-lines": "off",
-    "space-before-function-paren": 1,
+    "space-before-function-paren": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
     "comma-dangle": ["error", "only-multiline"],
     "camelcase": "warn",
-    "no-extra-semi": "error",
+    "no-extra-semi": "off",
+    "@typescript-eslint/prefer-readonly": "off",
     "curly": ["error", "multi-or-nest"]
   }
 }
