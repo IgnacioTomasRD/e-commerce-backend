@@ -8,16 +8,16 @@ const helperJWT = {
     if (accessToken !== undefined) {
       jwt.verify(accessToken, getSecretJwt(), (err, user) => {
         if (err != null) res.send('Access deniend, token expired or incorrect');
-        else next();
+        else 
+          next();
       });
     } else res.send('Access denied');
   },
 
-  generateAccessToken: function (name: string): string {
+  generateAccessToken: function (payload: object): string {
     const key = getSecretJwt();
-    return jwt.sign({ name }, key, { expiresIn: '5m' });
+    return jwt.sign(payload, key, { expiresIn: '5m' });
   }
-  
 };
 
 export default helperJWT;

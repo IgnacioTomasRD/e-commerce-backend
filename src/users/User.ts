@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-readonly */
 export class User {
+  private id!: string;
   private userName: string;
   private password: string;
   private firstName: string;
@@ -18,5 +19,9 @@ export class User {
 
   getPassword(): string {
     return this.password;
+  }
+
+  getId(): string {
+    return this.id;
   }
 }
