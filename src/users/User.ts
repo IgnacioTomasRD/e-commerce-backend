@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-readonly */
 export class User {
-  private id!: string;
+  private userId = 'hola';
   private userName: string;
   private password: string;
   private firstName: string;
@@ -21,7 +21,7 @@ export class User {
     return this.password;
   }
 
-  getId(): string {
-    return this.id;
+  getUserId(): string {
+    return this.userId;
   }
 }

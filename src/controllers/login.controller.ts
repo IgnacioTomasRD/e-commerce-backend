@@ -8,7 +8,7 @@ const loginController = {
 
     const user = userRepository.getUserByUsernameAndPassword(username, password);
     if (user != null) {
-      const accessToken = helperJWT.generateAccessToken({ userId: user.getId() });
+      const accessToken = helperJWT.generateAccessToken({ userId: user.getUserId() });
       res.header('authorization', accessToken);
       res.send(user);
     } else res.send('username or password is incorrect');

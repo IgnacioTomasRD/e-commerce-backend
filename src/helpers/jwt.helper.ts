@@ -1,22 +1,31 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import getSecretJwt from 'utils';
+import { JwtPayload } from 'interfaces/jwtPayload.interface';
 import jwt from 'jsonwebtoken';
 
 const helperJWT = {
   validateToken: function (req: Request, res: Response, next: NextFunction): void {
-    const accessToken = req.headers.authorization;
-    if (accessToken !== undefined) {
-      jwt.verify(accessToken, getSecretJwt(), (err, user) => {
-        if (err != null) res.send('Access deniend, token expired or incorrect');
-        else 
-          next();
-      });
-    } else res.send('Access denied');
+    const token = req.headers.authorization;
+    if (token == undefined) res.send('Access denied');
+    else {
+      try {
+        const decoded = jwt.verify(token, helperJWT.getSecretJwt()) as JwtPayload;
+        req.userId = decoded.userId;
+        next();
+      } catch (err: any) {
+        res.send(err.message);
+      }
+    }
   },
 
   generateAccessToken: function (payload: object): string {
-    const key = getSecretJwt();
+    const key = helperJWT.getSecretJwt();
     return jwt.sign(payload, key, { expiresIn: '5m' });
+  },
+
+  getSecretJwt: function (): string {
+    const secretJwt = process.env.SECRET_KEY_JWT;
+    if (secretJwt != null) return secretJwt;
+    else throw new Error('KEY JWT NOT FOUND');
   }
 };
 
