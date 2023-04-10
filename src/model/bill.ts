@@ -1,3 +1,3 @@
 export class Bill {
-  private path?: string;
+  private path!: string;
 }

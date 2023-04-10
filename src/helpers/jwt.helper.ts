@@ -5,11 +5,11 @@ import jwt from 'jsonwebtoken';
 const helperJWT = {
   validateToken: function (req: Request, res: Response, next: NextFunction): void {
     const token = req.headers.authorization;
-    if (token == undefined) res.send('Access denied');
+    if (token == undefined || tokenBlackList.includes(token)) res.send('Access denied');
     else {
       try {
         const decoded = jwt.verify(token, helperJWT.getSecretJwt()) as JwtPayload;
-        req.userId = decoded.userId;
+        res.locals.userId = decoded.userId;
         next();
       } catch (err: any) {
         res.send(err.message);
@@ -19,6 +19,7 @@ const helperJWT = {
 
   generateAccessToken: function (payload: object): string {
     const key = helperJWT.getSecretJwt();
+
     return jwt.sign(payload, key, { expiresIn: '5m' });
   },
 
@@ -30,3 +31,5 @@ const helperJWT = {
 };
 
 export default helperJWT;
+
+export const tokenBlackList: string[] = [];

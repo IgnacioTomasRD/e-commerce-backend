@@ -3,10 +3,12 @@ import express from 'express';
 import indexRouter from '@routes/index.routes';
 import mongoose from 'mongoose';
 import { getMongoDURL, getPORT } from 'utils';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(indexRouter);
 
@@ -26,3 +28,4 @@ const init = async function(): Promise<void> {
 }
 
 void init();
+

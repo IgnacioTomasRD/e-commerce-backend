@@ -1,15 +1,15 @@
-import { Schema, model } from 'mongoose';
+// import { Schema, model } from 'mongoose';
 
-interface IUser {
-  userName: string
-  password: string
-}
+// interface IUser {
+//   userName: string
+//   password: string
+// }
 
-const userSchema = new Schema<IUser>({
-  userName: String,
-  password: String
-});
+// const userSchema = new Schema<IUser>({
+//   userName: String,
+//   password: String
+// });
 
-const User = model<IUser>('User', userSchema);
+// const User = model<IUser>('User', userSchema);
 
-export default User;
+// export default User;
