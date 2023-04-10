@@ -3,13 +3,12 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["standard-with-typescript", "eslint:recommended"],
   "overrides": [],
   "plugins": ["import", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "rules": {
     "eqeqeq": "off",

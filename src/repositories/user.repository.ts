@@ -1,21 +1,29 @@
-import { User } from 'users/User';
 
-const userRepository = {
-  getAll: function (): User[] {
-    return [
-      new User('nachito', '1234', 'nacho', 'RD'),
-      new User('felipe', '12345', 'felipe', 'RD')
-    ];
-  },
+// import { IUser } from 'interfaces/Iuser.interface';
+// import User from 'schemas/user.schema';
+// import userModel from 'schemas/user.schema';
 
-  getUserByUsernameAndPassword: function (username: string, password: string): User | undefined {
-    return this.getAll().find((user) => user.getUserName() === username && user.getPassword() === password);
-  },
+// const userRepository = {
+//   getAll: async function () {
+//     return await userModel.find();
+//   },
 
-  getUserById(userId: string) {
-    return this.getAll().find(user => user.getUserId() === userId);
-  }
+//   getUserByUsernameAndPassword: async function (username: string, password: string): Promise<User | undefined> {
+//     return (await this.getAll()).find((user) => user.getUserName() === username && user.getPassword() === password);
+//   },
 
-};
+//   getUserById: async function (userId: string) {
+//     return (await this.getAll()).find((user) => user.getUserId() === userId);
+//   },
 
-export default userRepository;
+//   existsUserWithUserName: async function (userName: string) {
+//     return (await this.getAll()).some((user) => user.getUserName() === userName);
+//   },
+//   save: function(user: IUser): void{
+//     const userr = new User(user);
+//     userr.save();
+    
+//   } 
+// };
+
+// export default userRepository;

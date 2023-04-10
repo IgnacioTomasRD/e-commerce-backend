@@ -4,6 +4,8 @@
     "module": "commonjs" /* Specify what module code is generated. */,
     "outDir": "./build/src" /* Specify an output folder for all emitted files. */,
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     "baseUrl": "./src",
     "paths": {

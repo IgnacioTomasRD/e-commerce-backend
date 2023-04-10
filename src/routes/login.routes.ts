@@ -14,6 +14,6 @@ loginRouter.post('/login', (req, res) => {
   loginController.login(req, res);
 });
 
-loginRouter.get('/rutaAutenticada', helperJWT.validateToken, (req, res) => res.send(userRepository.getUserById(req.userId || "")));
+loginRouter.get('/rutaAutenticada', helperJWT.validateToken, (req, res) => res.send(userRepository.getUserById(req.userId || '')));
 
 export default loginRouter;
