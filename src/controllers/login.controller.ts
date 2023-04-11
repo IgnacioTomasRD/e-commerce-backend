@@ -23,6 +23,7 @@ const loginController = {
     if(token!= undefined)
     {
       tokenBlackList.push(token);
+      // res.clearCookie;
       res.send("log out succesful");
     } 
   }
