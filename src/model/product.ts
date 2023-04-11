@@ -9,7 +9,7 @@ export class Product {
   @prop({ required: true })
   private description?: string;
   @prop({ ref: () => Category,default: [] })
-  private category?: mongoose.Types.Array<Category>;
+  private categories?: mongoose.Types.Array<Category>;
   @prop({ref: ()=> Characteristics,default:[]})
   private characteristics?: mongoose.Types.Array<Characteristics>;
   @prop({ type: String, required: true, default: [] })

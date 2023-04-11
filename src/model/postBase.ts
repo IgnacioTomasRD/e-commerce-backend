@@ -1,9 +1,9 @@
-import { Post } from "../interfaces/post";
+import { Post } from "./post";
 import { Product } from "./product";
 import { StatusPost } from "./statusPost";
 
 
-export class PostBase implements Post{
+export class PostBase extends Post{
     private product?: Product;
     private name?: string;
     private description?: string;

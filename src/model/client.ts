@@ -1,5 +1,5 @@
 import { Adress } from "./adress";
-import { Post } from "../interfaces/post";
+import { Post } from "./post";
 import { ShoppingCart } from "./shoppingCart";
 import { Transaction } from "./transaccion";
 
