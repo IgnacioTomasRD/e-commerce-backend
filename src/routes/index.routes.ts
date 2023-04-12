@@ -4,6 +4,7 @@ import registerRouter from './register.routes';
 import productRouter from './product.routes';
 import categoryRouter from './category.routes';
 import postRouter from './post.routes';
+import shoppingCartRouter from './shopping.routes';
 
 const indexRouter = Router();
 
@@ -12,6 +13,8 @@ indexRouter.use(loginRouter);
 indexRouter.use(productRouter);
 indexRouter.use(categoryRouter);
 indexRouter.use(postRouter);
+indexRouter.use(shoppingCartRouter);
+
 
 export default indexRouter;
 

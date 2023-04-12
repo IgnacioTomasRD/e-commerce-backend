@@ -1,5 +1,6 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 
+@modelOptions({schemaOptions: {collection: "characteristics"}})
 export class Characteristics{
     @prop({ required: true })
     private name?: string;

@@ -1,8 +1,8 @@
-import { prop, mongoose, Ref, getDiscriminatorModelForClass } from "@typegoose/typegoose";
+import { prop, mongoose,Ref,DocumentType, getDiscriminatorModelForClass } from "@typegoose/typegoose";
 import { Post, PostModel, TypesOfPost } from "./post";
 import { Product } from "./product";
-import { StatusPost } from "./statusPost";
-import { TypeOfStatusPost } from "./typeOfStatusPost";
+import { PostStatus } from "./statusPost";
+
 
 
 export class PostBase extends Post{
@@ -16,8 +16,13 @@ export class PostBase extends Post{
     private price?: number;
     @prop({ required: true })
     private stock?: number;
-    @prop({ ref: () => StatusPost, default: [] })
-    private states!: mongoose.Types.Array<StatusPost>;
+    @prop({ ref: () => PostStatus,type: () => [PostStatus], default: [] })
+    public states!: mongoose.Types.Array<PostStatus>;
+
+    public getStates(this: DocumentType<PostBase>) {
+        // return this.states.filter(state => state.isActive());
+        return this.states;
+    }
 }
 export const PostBaseModel = getDiscriminatorModelForClass(PostModel, PostBase, TypesOfPost.PostBasic);
 

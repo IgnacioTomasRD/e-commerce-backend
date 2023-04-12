@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 
 const helperJWT = {
   validateToken: function (req: Request, res: Response, next: NextFunction): void {
-    const token = req.headers.authorization;
-    if (token == undefined || tokenBlackList.includes(token)) res.send('Access denied');
+    const token = req.cookies.authorization;
+    if (token == undefined) res.send('Access denied');
     else {
       try {
         const decoded = jwt.verify(token, helperJWT.getSecretJwt()) as JwtPayload;

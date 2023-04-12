@@ -1,15 +1,31 @@
-import { Adress } from "./adress";
+import { prop, mongoose, Ref, modelOptions, getModelForClass } from "@typegoose/typegoose";
+import { Address } from "./adress";
 import { Post } from "./post";
 import { ShoppingCart } from "./shoppingCart";
 import { Transaction } from "./transaccion";
 
+@modelOptions({schemaOptions: {collection: "clients"}})
 export class Client{
+    @prop({ required: true })
     private firstName?: string;
+    @prop({ required: true })
     private lastName?: string;
+    @prop({ required: true })
     private dni?: string;
+    @prop({ required: true })
     private birthDate?: Date;
-    private favPost?: Post[];
-    private shoppingCart?: ShoppingCart;
-    private purchases?: Transaction[];
-    private adress?: Adress[];
+    @prop({ ref: () => Post, default: [] })
+    private favPost?: mongoose.Types.Array<Post>;
+    @prop({ type: () => ShoppingCart, default: new ShoppingCart()})
+    private shoppingCart!: ShoppingCart;
+    @prop({ ref: () => Transaction,default: []})
+    private purchases?: Ref<Transaction>[];
+    @prop({ _id: false, type: () => Address })
+    private address?: Address;
+
+    getShoppingCart(){
+        return this.shoppingCart;
+    }
 }
+
+export const ClientModel = getModelForClass(Client);

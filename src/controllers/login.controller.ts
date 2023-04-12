@@ -9,7 +9,7 @@ const loginController = {
     const user = await this.getUserByUsernameAndPassword(userName, password);
     if (user != null) {
       const accessToken = helperJWT.generateAccessToken({ userId: user._id });
-      res.cookie('authorization', accessToken);
+      res.cookie('authorization', accessToken,{httpOnly: true});
       res.send(user);
     } else res.send('username or password is incorrect');
   },
@@ -19,11 +19,10 @@ const loginController = {
   },
 
   logout: function (req: Request, res: Response) {
-    const token = req.headers['authorization'];
+    const token = req.cookies['authorization'];
     if(token!= undefined)
     {
-      tokenBlackList.push(token);
-      // res.clearCookie;
+      res.clearCookie('authorization');
       res.send("log out succesful");
     } 
   }
