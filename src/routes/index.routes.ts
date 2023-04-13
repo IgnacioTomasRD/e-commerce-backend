@@ -5,6 +5,7 @@ import productRouter from './product.routes';
 import categoryRouter from './category.routes';
 import postRouter from './post.routes';
 import shoppingCartRouter from './shopping.routes';
+import userRouter from './user.routes';
 
 const indexRouter = Router();
 
@@ -14,6 +15,7 @@ indexRouter.use(productRouter);
 indexRouter.use(categoryRouter);
 indexRouter.use(postRouter);
 indexRouter.use(shoppingCartRouter);
+indexRouter.use(userRouter);
 
 
 export default indexRouter;

@@ -10,14 +10,14 @@ export class User  {
   @prop({type: ()=>Client})
   private client!: Client;
   
-  getUserName(): string {
+  public getUserName(): string {
     return this.userName;
   }
-  getPassword(): string {
+  public getPassword(): string {
     return this.password;
   }
 
-  getClient(){
+  public getClient(){
     return this.client;
   }
 }

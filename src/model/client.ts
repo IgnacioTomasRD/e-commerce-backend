@@ -4,7 +4,6 @@ import { Post } from "./post";
 import { ShoppingCart } from "./shoppingCart";
 import { Transaction } from "./transaccion";
 
-@modelOptions({schemaOptions: {collection: "clients"}})
 export class Client{
     @prop({ required: true })
     private firstName?: string;
@@ -21,10 +20,34 @@ export class Client{
     @prop({ ref: () => Transaction,default: []})
     private purchases?: Ref<Transaction>[];
     @prop({ _id: false, type: () => Address })
-    private address?: Address;
+    private address!: Address;
 
     getShoppingCart(){
         return this.shoppingCart;
+    }
+
+    getFirstName(){
+        return this.firstName;
+    }
+
+    getLastName(){
+        return this.lastName;
+    }
+
+    getDni(){
+        return this.dni;
+    }
+
+    getBirthDate(){
+        return this.birthDate;
+    }
+
+    getAddress(){
+        return this.address;
+    }
+
+    getPurchases(){
+        return this.purchases;
     }
 }
 
