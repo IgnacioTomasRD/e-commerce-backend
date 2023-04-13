@@ -2,6 +2,8 @@ import { mongoose } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
 import { ClientModel } from 'model/client';
 import { ItemModel } from 'model/item';
+import { PostModel } from 'model/post';
+import { PostBaseModel } from 'model/postBase';
 import { ShoppingCartModel } from 'model/shoppingCart';
 import { UserModel } from 'users/User';
 
@@ -10,9 +12,10 @@ export const shoppingCartController = {
     const id = res.locals.userId;
     const {postId, amount} = req.body;
     const user = await UserModel.findById(id).exec();
-    if (user) {
+    const post= await PostModel.findById(id).exec();
+    if (user && post) {
       const client = user.getClient();
-      const item = await ItemModel.create({post:new mongoose.Types.ObjectId(postId),amount});
+      const item = await ItemModel.create({post:new mongoose.Types.ObjectId(postId),amount,price: post.getPrice()});
       const shoppingCart = client.getShoppingCart()
       shoppingCart.add(item._id);
       await user.save();

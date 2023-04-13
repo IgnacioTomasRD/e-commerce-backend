@@ -1,10 +1,12 @@
 import { mongoose } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
+import { Item, ItemModel } from 'model/item';
 import { PostModel } from 'model/post';
 import { PostBaseModel } from 'model/postBase';
 import { ProductModel } from 'model/product';
 import { StatusPostModel } from 'model/statusPost';
 import { TypeOfStatusPost } from 'model/typeOfStatusPost';
+import { UserModel } from 'users/User';
 
 export const postController = {
   save: async function (req: Request, res: Response) {
@@ -62,7 +64,17 @@ export const postController = {
       await PostBaseModel.findByIdAndRemove(id).exec();
       return res.send('product deleted sucessful');
     } else {
-      return res.send('Product not found');
+      return res.send('Post not found');
+    }
+  },
+  handleTransaction: async function (req: Request, res: Response) {
+    const idUser = res.locals.userId;
+    const user = await UserModel.findById(idUser);
+    if (user) {
+      const client = user.getClient();
+      const { amount } = req.body;
+      const idProd = req.params.id;
+      const item = await ItemModel.create(idProd, amount);
     }
   }
 };

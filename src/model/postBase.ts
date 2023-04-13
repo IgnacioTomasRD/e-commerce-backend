@@ -13,7 +13,7 @@ export class PostBase extends Post{
     @prop({ required: true })
     private description?: string;
     @prop({ required: true })
-    private price?: number;
+    private price!: number;
     @prop({ required: true })
     private stock?: number;
     @prop({ ref: () => PostStatus,type: () => [PostStatus], default: [] })
@@ -22,6 +22,10 @@ export class PostBase extends Post{
     public getStates(this: DocumentType<PostBase>) {
         // return this.states.filter(state => state.isActive());
         return this.states;
+    }
+
+    public getPrice(): number {
+        return this.price;
     }
 }
 export const PostBaseModel = getDiscriminatorModelForClass(PostModel, PostBase, TypesOfPost.PostBasic);

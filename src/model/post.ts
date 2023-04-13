@@ -6,6 +6,11 @@ export enum TypesOfPost {
 }
 
 @modelOptions({ schemaOptions: { collection: "posts" } })
-export class Post {}
+export class Post {
+
+  getPrice(){
+    
+  }
+}
 
 export const PostModel = getModelForClass(Post);

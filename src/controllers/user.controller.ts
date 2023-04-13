@@ -26,33 +26,6 @@ const userController = {
     const userDTO = createUserDTO(user);
     return res.status(200).send(userDTO);
   },
-  editClient: async function (req: Request, res: Response) {
-    const id = res.locals.userId;
-    const updates = req.body;
-    const options = { new: true };
-
-    const user = await UserModel.findOneAndUpdate({ _id: id }, { client: updates }, options);
-
-    if (!user) {
-      return res.status(404).json('User not found');
-    }
-    const userDTO = createUserDTO(user);
-    return res.status(200).send(userDTO);
-  },
-  editAddress: async function (req: Request, res: Response) {
-    const id = res.locals.userId;
-    const updates = req.body;
-    const options = { new: true };
-
-    const user = await UserModel.findOneAndUpdate({ _id: id }, { 'client.address': updates }, options);
-
-    if (!user) {
-      return res.status(404).json('User not found');
-    }
-
-    const userDTO = createUserDTO(user);
-    return res.status(200).send(userDTO);
-  },
   purchases: async function (req: Request, res: Response) {
     const id = res.locals.userId;
     const user = await UserModel.findById(id);
