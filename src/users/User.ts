@@ -1,14 +1,14 @@
-import { prop,getModelForClass, Ref, DocumentType} from "@typegoose/typegoose";
+import { prop,getModelForClass, Ref, DocumentType, modelOptions} from "@typegoose/typegoose";
 import { Client } from "model/client";
 
-
+@modelOptions({schemaOptions: {collection: "users"}})
 export class User  {  
   @prop({required: true})
   private userName!: string;
   @prop({required: true})
   private password!: string;
-  @prop({type: ()=>Client})
-  private client!: Client;
+  @prop({ref: ()=>Client, required: true})
+  private client!: Ref<Client>;
   
   public getUserName(): string {
     return this.userName;
@@ -17,7 +17,7 @@ export class User  {
     return this.password;
   }
 
-  public getClient(){
+  public getClientId(){
     return this.client;
   }
 }

@@ -23,9 +23,9 @@ const registerController = {
     
     const address = await AddressModel.create({street,number,extraDescription,locality,province});
     const client = await ClientModel.create({firstName,lastName,dni,birthDate,address});
+    await client.save();
 
-
-    const newUser = await UserModel.create({ userName, password,client});
+    const newUser = await UserModel.create({ userName, password,client: client._id});
     await newUser.save();
 
     return res.status(201).send('Usuario creado con exito creo');

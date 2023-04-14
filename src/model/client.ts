@@ -4,6 +4,8 @@ import { Post } from "./post";
 import { ShoppingCart } from "./shoppingCart";
 import { Transaction } from "./transaccion";
 
+
+@modelOptions({schemaOptions: {collection: "clients"}})
 export class Client{
     @prop({ required: true })
     private firstName?: string;

@@ -1,4 +1,4 @@
-import { modelOptions, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 import { TypeOfStatusTransaction } from "./typeOfStatusTransaction";
 
 @modelOptions({schemaOptions: {collection: "transactionsStatus"}})
@@ -12,5 +12,10 @@ export class TransactionStatus{
 
     public isActive(this: TransactionStatus) {
         return this.active;
-      }
+    }
+    public setActivity(activity: boolean){
+      this.active = activity;
+    }
 }
+
+export const TransactionStatusModel = getModelForClass(TransactionStatus)

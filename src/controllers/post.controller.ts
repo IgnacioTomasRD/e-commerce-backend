@@ -1,12 +1,14 @@
-import { mongoose } from '@typegoose/typegoose';
+import { DocumentType, mongoose } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
+import { helperTransaction } from 'helpers/transaction.helper';
 import { Item, ItemModel } from 'model/item';
 import { PostModel } from 'model/post';
 import { PostBaseModel } from 'model/postBase';
 import { ProductModel } from 'model/product';
-import { StatusPostModel } from 'model/statusPost';
+import { StatusPostModel } from 'model/PostStatus';
 import { TypeOfStatusPost } from 'model/typeOfStatusPost';
 import { UserModel } from 'users/User';
+import { Client, ClientModel } from 'model/client';
 
 export const postController = {
   save: async function (req: Request, res: Response) {
@@ -71,10 +73,25 @@ export const postController = {
     const idUser = res.locals.userId;
     const user = await UserModel.findById(idUser);
     if (user) {
-      const client = user.getClient();
-      const { amount } = req.body;
-      const idProd = req.params.id;
-      const item = await ItemModel.create(idProd, amount);
+      const client = await ClientModel.findById(user.getClientId());
+      if (client != null) {
+        const amount = req.query.amount || 1;
+        const idPost = req.params.id;
+        const post = await PostModel.findById(idPost);
+        const item = await ItemModel.create({ post: idPost, amount, price: post?.getPrice() });
+        await item.save();
+        const transaction = await helperTransaction.generateTransaction(
+          client as DocumentType<Client>,
+          [item] as DocumentType<Item>[]
+        );
+        await transaction.populate('transactionStatus');
+        await transaction.save();
+        res.send(transaction);
+      } else {
+        res.send('no se encontro el cliente');
+      }
+    } else {
+      res.send('user not found');
     }
   }
 };

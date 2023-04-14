@@ -7,4 +7,5 @@ const shoppingCartRouter = Router();
 shoppingCartRouter.get('/shoppingCart', helperJWT.validateToken, (req, res) => shoppingCartController.findAllItems(req, res));
 shoppingCartRouter.post('/shoppingCart', helperJWT.validateToken, (req, res) => shoppingCartController.add(req, res));
 shoppingCartRouter.delete('/shoppingCart/:itemId', helperJWT.validateToken, (req, res) => shoppingCartController.deleteItem(req, res));
+shoppingCartRouter.post('/shoppingCart/buy', helperJWT.validateToken, (req, res) => shoppingCartController.buy(req, res));
 export default shoppingCartRouter;
