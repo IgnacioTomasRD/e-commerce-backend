@@ -4,13 +4,16 @@ import { Post, PostModel } from 'model/post';
 
 export const helperStock = {
   discountStockByItems: async function (items: DocumentType<Item>[]) {
-    for(let item of items){
-      let post = await PostModel.findById(item.getPostRef()) as DocumentType<Post>;
+    for (let item of items) {
+      let post = (await PostModel.findById(item.getPostRef())) as DocumentType<Post>;
       if (post) {
-        console.log("ENTRE");
-        post.reduceStock(item.getAmount());
-        await post.save();
-        console.log(post);
+        if (post.getStock() - item.getAmount() >= 0) {
+          post.reduceStock(item.getAmount());
+          await post.save();
+          console.log(post);
+        } else {
+          throw new Error("no hay mas stock del producto: " + post._id)
+        }
       }
     }
   }

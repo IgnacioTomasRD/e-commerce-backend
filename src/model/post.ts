@@ -15,7 +15,6 @@ export class Post {
   }
 
   public reduceStock(stock: number){
-    console.log(stock + "stock actual: " + this.getStock() )
     this.stock =  this.getStock() - stock;
   } 
 

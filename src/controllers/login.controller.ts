@@ -1,21 +1,22 @@
 import { type Request, type Response } from 'express';
+import { helperCrypt } from 'helpers/crypt.helper';
 import helperJWT, { tokenBlackList } from 'helpers/jwt.helper';
 import { UserModel } from 'users/User';
+import { Message } from 'utils/message';
 
 const loginController = {
   login: async function (req: Request, res: Response) {
     const { userName, password } = req.body;
-
-    const user = await this.getUserByUsernameAndPassword(userName, password);
-    if (user != null) {
+    const user = await this.getUserByUsername(userName);
+    if (user != null && (await helperCrypt.compare(password,user.getPassword()))) {
       const accessToken = helperJWT.generateAccessToken({ userId: user._id });
       res.cookie('authorization', accessToken,{httpOnly: true});
-      res.send(user);
-    } else res.send('username or password is incorrect');
+      res.status(200).send(user);
+    } else res.status(404).send(Message.USER_OR_PASSWORD_INCORRECT);
   },
 
-  getUserByUsernameAndPassword: async function (userName: string, password: string) {
-    return await UserModel.findOne({ userName: userName, password: password });
+  getUserByUsername: async function (userName: String) {
+    return await UserModel.findOne({userName: userName});
   },
 
   logout: function (req: Request, res: Response) {
@@ -23,8 +24,10 @@ const loginController = {
     if(token!= undefined)
     {
       res.clearCookie('authorization');
-      res.send("log out succesful");
-    } 
+      res.status(200).send(Message.LOG_OUT_SUCCESFUL);
+    } else {
+      res.status(404).send(Message.NOT_AUTHORIZED);
+    }
   }
 };
 

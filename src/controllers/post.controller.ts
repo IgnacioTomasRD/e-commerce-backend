@@ -9,6 +9,7 @@ import { StatusPostModel } from 'model/PostStatus';
 import { TypeOfStatusPost } from 'model/typeOfStatusPost';
 import { UserModel } from 'users/User';
 import { Client, ClientModel } from 'model/client';
+import { Message } from 'utils/message';
 
 export const postController = {
   save: async function (req: Request, res: Response) {
@@ -17,15 +18,15 @@ export const postController = {
       const product = await ProductModel.findById(new mongoose.Types.ObjectId(productId));
       const newState = await createNewState();
       const postBase = await PostBaseModel.create({ product, name, description, price, stock, states: [newState] });
-      postBase.save();
-      res.send(postBase);
+      await postBase.save();
+      res.status(201).send(postBase);
     } catch (error: any) {
-      res.send(error.message);
+      res.status(500).send(error.message);
     }
   },
   findAll: async function (req: Request, res: Response) {
     const posts = await PostModel.find();
-    return res.send(posts);
+    return res.status(200).send(posts);
   },
 
   findById: async function (req: Request, res: Response) {
@@ -34,7 +35,7 @@ export const postController = {
     if (post) {
       res.send(post);
     } else {
-      res.status(404).send('post not found');
+      res.status(404).send(Message.POST_NOT_FOUND);
     }
   },
 
@@ -43,11 +44,10 @@ export const postController = {
     let post = await PostBaseModel.findById(new mongoose.Types.ObjectId(id));
     if (post) {
       await post.populate('states');
-      //revisar proyeccion para que no se manden los states
       let postProyection = { ...post.toObject(), stateActive: post.getStates().find((state) => state.isActive()) };
-      res.send(postProyection);
+      res.status(200).send(postProyection);
     } else {
-      res.status(404).send('post not found');
+      res.status(404).send(Message.POST_NOT_FOUND);
     }
   },
   edit: async function (req: Request, res: Response) {
@@ -56,17 +56,17 @@ export const postController = {
     const options = { new: true };
     const post = await PostModel.findOneAndUpdate({ _id: id }, updates, options);
     if (!post) {
-      return res.status(404).json('Post not found');
+      return res.status(404).json(Message.POST_NOT_FOUND);
     }
-    return res.status(200).send(post);
+    return res.status(201).send(post);
   },
   delete: async function (req: Request, res: Response) {
     const { id } = req.params;
     if (await PostBaseModel.findById(id)) {
       await PostBaseModel.findByIdAndRemove(id).exec();
-      return res.send('product deleted sucessful');
+      return res.status(200).send(Message.POST_DELETE_SUCESSFUL);
     } else {
-      return res.send('Post not found');
+      return res.status(404).send(Message.POST_NOT_FOUND);
     }
   },
   handleTransaction: async function (req: Request, res: Response) {
@@ -86,12 +86,12 @@ export const postController = {
         );
         await transaction.populate('transactionStatus');
         await transaction.save();
-        res.send(transaction);
+        res.status(201).send(transaction);
       } else {
-        res.send('no se encontro el cliente');
+        res.status(404).send(Message.CLIENT_NOT_FOUND);
       }
     } else {
-      res.send('user not found');
+      res.status(404).send(Message.USER_NOT_FOUND);
     }
   }
 };

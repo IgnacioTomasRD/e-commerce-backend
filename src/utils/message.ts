@@ -1,0 +1,16 @@
+export enum Message {
+  CATEGORY_SAVE_SUCCESFUL = 'Category saved succesfully',
+  USER_OR_PASSWORD_INCORRECT = 'username or password is incorrect',
+  LOG_OUT_SUCCESFUL = 'Log out succeful',
+  POST_NOT_FOUND = 'Post not found',
+  POST_DELETE_SUCESSFUL = 'Post deleted succefully',
+  CLIENT_NOT_FOUND = 'Client not found',
+  USER_NOT_FOUND = 'User not found',
+  PRODUCT_NOT_FOUND = 'Product not found',
+  USER_REGISTER_SUCCES = 'User created succesfully',
+  ITEM_NOT_FOUND = 'Item not found',
+  TRANSACTION_NOT_FOUND = 'Transaction not found',
+  NOT_AUTHORIZED = 'Not authorized',
+  ITEM_ADD_SUCCESFUL = 'Item added succesfully',
+  POST_OR_USER_INCORRECT = 'User or Post not found',
+}

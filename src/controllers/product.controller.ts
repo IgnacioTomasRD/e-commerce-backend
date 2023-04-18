@@ -1,12 +1,13 @@
 import { Request, Response, response } from 'express';
 import { CategoryModel } from 'model/category';
 import { Product, ProductModel } from 'model/product';
+import { Message } from 'utils/message';
 
 export const productController = {
   findAll: async function (req: Request, res: Response): Promise<void> {
     try {
       const products = await ProductModel.find();
-      res.send(products);
+      res.status(200).send(products);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -24,10 +25,10 @@ export const productController = {
         characteristics,
         img
       });
-      newProduct.save();
-      res.send(newProduct);
+      await newProduct.save();
+      res.status(201).send(newProduct);
     } catch (error: any) {
-      res.send(error.message);
+      res.status(500).send(error.message);
     }
   },
   findById: async function (req: Request, res: Response) {
@@ -35,7 +36,7 @@ export const productController = {
     const product = await ProductModel.findById(id);
 
     if (!product) {
-      return res.status(404).json('Product not found');
+      return res.status(404).json(Message.PRODUCT_NOT_FOUND);
     }
     return res.status(200).send(product);
   },
@@ -50,7 +51,7 @@ export const productController = {
     const product = await ProductModel.findOneAndUpdate({ _id: id }, updates, options);
 
     if (!product) {
-      return res.status(404).json('Product not found');
+      return res.status(404).json(Message.PRODUCT_NOT_FOUND);
     }
 
     return res.status(200).send(product);
@@ -59,9 +60,9 @@ export const productController = {
     const { id } = req.params;
     if (await ProductModel.findById(id)) {
       await ProductModel.findByIdAndRemove(id).exec();
-      return res.send('product deleted sucessful')
+      return res.status(200).send('product deleted sucessful')
     } else {
-      return res.send('Product not found');
+      return res.status(404).send(Message.PRODUCT_NOT_FOUND);
     }
   }
 };

@@ -9,12 +9,14 @@ export class ShoppingCart{
         this.items.push(itemId);
     }
     delete(itemId: Ref<Item>): void {
-        console.log(itemId);
-        console.log();
         this.items = this.items.filter(i => i.toString() !== itemId.toString())
     }
 
     getItems(){
         return this.items;
+    }
+
+    clearItems(){
+        this.items = []
     }
 }

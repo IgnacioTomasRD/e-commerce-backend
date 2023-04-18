@@ -6,6 +6,7 @@ import { Client, ClientModel } from 'model/client';
 import { ItemModel } from 'model/item';
 import { PostModel } from 'model/post';
 import { UserModel } from 'users/User';
+import { Message } from 'utils/message';
 
 export const shoppingCartController = {
   async add(req: Request, res: Response) {
@@ -25,12 +26,12 @@ export const shoppingCartController = {
         const shoppingCart = client.getShoppingCart();
         shoppingCart.add(item._id);
         await client.save();
-        res.send('post agregado al carrito');
+        res.status(200).send(Message.ITEM_ADD_SUCCESFUL);
       } else {
-        res.send('algo ha salido mal 1');
+        res.status(404).send(Message.CLIENT_NOT_FOUND);
       }
     } else {
-      res.send('algo ha salido mal 2');
+      res.status(404).send(Message.POST_OR_USER_INCORRECT);
     }
   },
   async findAllItems(req: Request, res: Response) {
@@ -38,26 +39,31 @@ export const shoppingCartController = {
     const user = await UserModel.findById(id);
     if (user) {
       const client = await ClientModel.findById(user.getClientId());
-      if (client) return res.send(client.getShoppingCart());
-      else return res.send('no se encontro el cliente');
-    } else return res.send('user not found');
+      if (client) return res.status(200).send(client.getShoppingCart());
+      else return res.status(404).send(Message.CLIENT_NOT_FOUND);
+    } else return res.status(404).send(Message.USER_NOT_FOUND);
   },
   async deleteItem(req: Request, res: Response) {
     const id = res.locals.userId;
     const itemToDelete = new mongoose.Types.ObjectId(req.params.itemId);
     const user = await UserModel.findById(id);
-    if (user && itemToDelete) {
+    const item = await ItemModel.findById(itemToDelete);
+    if (!item) {
+      res.status(404).send(Message.ITEM_NOT_FOUND);
+    }
+    if (user) {
       const client = await ClientModel.findById(user.getClientId());
       if (client) {
         const shoppingCart = client.getShoppingCart();
         shoppingCart.delete(itemToDelete);
-        client.save();
-        res.send('item deleted sucessful');
+        await ItemModel.findByIdAndRemove(itemToDelete);
+        await client.save();
+        res.status(200).send('item deleted sucessful');
       } else {
-        res.send('no se ha encontrado el cliente');
+        res.status(404).send(Message.CLIENT_NOT_FOUND);
       }
     } else {
-      res.send('the user or item not found');
+      res.status(404).send(Message.USER_NOT_FOUND);
     }
   },
   async buy(req: Request, res: Response) {
@@ -71,10 +77,12 @@ export const shoppingCartController = {
         const transaction = await helperTransaction.generateTransaction(client as DocumentType<Client>, items);
         await transaction.populate('transactionStatus');
         await transaction.save();
-        return res.send(transaction);
+        return res.status(200).send(transaction);
       } else {
-        return res.send('no se encontro el cliente');
+        return res.status(404).send(Message.CLIENT_NOT_FOUND);
       }
-    } else return res.send('user not found');
+    } else {
+      return res.status(404).send(Message.USER_NOT_FOUND);
+    }
   }
 };

@@ -10,8 +10,8 @@ transactionRouter.get('/transaction/:transactionId', helperJWT.validateToken, (r
 transactionRouter.post('/transaction/:transactionId', helperJWT.validateToken, (req, res) =>
   transactionController.pay(req, res)
 );
-// transactionRouter.post('/transaction/:idTransaction/cancel', helperJWT.validateToken, (req, res) =>
-//   transactionController.cancelBuy(req, res)
-// );
+transactionRouter.post('/transaction/:transactionId/cancel', helperJWT.validateToken, (req, res) =>
+  transactionController.cancelBuy(req, res)
+);
 
 export default transactionRouter;

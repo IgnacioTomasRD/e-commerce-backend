@@ -20,7 +20,7 @@ const helperJWT = {
   generateAccessToken: function (payload: object): string {
     const key = helperJWT.getSecretJwt();
 
-    return jwt.sign(payload, key, { expiresIn: '5m' });
+    return jwt.sign(payload, key, { expiresIn: '72h' });
   },
 
   getSecretJwt: function (): string {

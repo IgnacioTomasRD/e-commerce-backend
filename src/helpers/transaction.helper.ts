@@ -26,11 +26,9 @@ export const helperTransaction = {
     const transactionStatusList = transaction.getAllTransactionStatus();
     for (const status of transactionStatusList) {
       await TransactionStatusModel.findByIdAndUpdate(status._id, { active: false },{ new: true });
-      console.log(status);
     }
     transaction.addStatus(newStatus);
     await transaction.save();
-    console.log(transaction);
   },
   getItemsOfTransaction: async function(itemsRef: Ref<Item>[]){
     const items = [];

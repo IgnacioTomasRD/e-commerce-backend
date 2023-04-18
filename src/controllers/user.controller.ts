@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { Address } from 'model/adress';
 import { ClientModel } from 'model/client';
 import { User, UserModel } from 'users/User';
+import { Message } from 'utils/message';
 
 const userController = {
   profile: async function (req: Request, res: Response) {
@@ -10,9 +11,9 @@ const userController = {
     let user = await UserModel.findById(id);
     if (user) {
       const userDTO = await createUserDTO(user as DocumentType<User>);
-      res.send(userDTO);
+      res.status(200).send(userDTO);
     } else {
-      res.send('usuario no encontrado');
+      res.send(Message.USER_NOT_FOUND);
     }
   },
   edit: async function (req: Request, res: Response) {
@@ -23,10 +24,10 @@ const userController = {
     const user = await UserModel.findOneAndUpdate({ _id: id }, updates, options);
 
     if (!user) {
-      return res.status(404).json('User not found');
+      return res.status(404).json(Message.USER_NOT_FOUND);
     }
     const userDTO = await createUserDTO(user as DocumentType<User>);
-    return res.status(200).send(userDTO);
+    return res.status(201).send(userDTO);
   },
   purchases: async function (req: Request, res: Response) {
     const id = res.locals.userId;
@@ -36,10 +37,10 @@ const userController = {
       if (client) {
         res.send(client.getPurchases());
       } else {
-        res.send('el cliente no se ha encontrado');
+        res.status(404).send(Message.CLIENT_NOT_FOUND);
       }
     } else {
-      res.send('user not found');
+      res.status(404).send(Message.USER_NOT_FOUND);
     }
   }
 };

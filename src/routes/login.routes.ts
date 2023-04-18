@@ -4,11 +4,6 @@ import helperJWT from 'helpers/jwt.helper';
 
 const loginRouter = Router();
 
-
-loginRouter.get('/login', (req, res) => {
-  res.send('hola campeon entraste al login que te parece');
-});
-
 loginRouter.post('/login', (req, res) => {
    loginController.login(req, res);
 });
