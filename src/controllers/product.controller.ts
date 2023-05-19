@@ -1,6 +1,9 @@
+import { BeAnObject, IObjectWithTypegooseFunction } from '@typegoose/typegoose/lib/types';
 import { Request, Response, response } from 'express';
 import { CategoryModel } from 'model/category';
+import { Characteristics } from 'model/characteristics';
 import { Product, ProductModel } from 'model/product';
+import { Document, Types } from 'mongoose';
 import { Message } from 'utils/message';
 
 export const productController = {
@@ -14,7 +17,14 @@ export const productController = {
     }
   },
   save: async function (req: Request, res: Response) {
-    const { name, description, categories, characteristics, img } = req.body;
+    const { name, description, categories, characteristics, imgs } = req.body;
+    const characteristicsArray: Characteristics[]= [];
+
+    characteristics.forEach(async (ch: any) =>{
+      // const newCharacterisct = await CharacteristicsModel.create({name: ch.name,value: ch.value})
+      // await newCharacterisct.save();
+      return characteristicsArray.push(new Characteristics(ch.name,ch.value));
+    })
 
     try {
       const categoriesSelected = await getCategoriesByNames(categories);
@@ -22,8 +32,8 @@ export const productController = {
         name,
         description,
         categories: categoriesSelected,
-        characteristics,
-        img
+        characteristics: characteristicsArray,
+        imgs
       });
       await newProduct.save();
       res.status(201).send(newProduct);

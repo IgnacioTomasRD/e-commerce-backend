@@ -1,5 +1,4 @@
-import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
-
+import { getModelForClass, prop } from "@typegoose/typegoose";
 
 export class Address {
   @prop({ required: true })
@@ -29,6 +28,5 @@ export class Address {
     return this.province;
   }
 }
-
 
 export const AddressModel = getModelForClass(Address);

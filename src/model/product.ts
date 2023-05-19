@@ -10,8 +10,8 @@ export class Product {
   private description?: string;
   @prop({ ref: () => Category,default: [] })
   private categories?: mongoose.Types.Array<Category>;
-  @prop({ref: ()=> Characteristics,default:[]})
-  private characteristics?: mongoose.Types.Array<Characteristics>;
+  @prop({default:[]})
+  private characteristics?: Characteristics[];
   @prop({ type: String, required: true, default: [] })
   private imgs?: mongoose.Types.Array<string>;
 }
