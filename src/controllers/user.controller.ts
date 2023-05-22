@@ -46,7 +46,7 @@ const userController = {
 };
 
 async function createUserDTO(user: User) {
-  const userName = user.getUserName();
+  const email = user.getEmail();
   const password = user.getPassword();
   const client = await ClientModel.findById(user.getClientId());
   if (client) {
@@ -55,7 +55,7 @@ async function createUserDTO(user: User) {
     const birthDate = client.getBirthDate();
     const dni = client.getDni();
     const address = client.getAddress();
-    return { userName, password, client: { firstName, lastName, dni, birthDate, address } };
+    return { email, password, client: { firstName, lastName, dni, birthDate, address } };
   } else{
     throw new Error("no se ha encontrado el cliente");
   }

@@ -6,8 +6,8 @@ import { Message } from 'utils/message';
 
 const loginController = {
   login: async function (req: Request, res: Response) {
-    const { userName, password } = req.body;
-    const user = await this.getUserByUsername(userName);
+    const { email, password } = req.body;
+    const user = await this.getUserByEmail(email);
     if (user != null && (await helperCrypt.compare(password,user.getPassword()))) {
       const accessToken = helperJWT.generateAccessToken({ userId: user._id });
       res.cookie('authorization', accessToken,{httpOnly: true});
@@ -15,8 +15,8 @@ const loginController = {
     } else res.status(404).send(Message.USER_OR_PASSWORD_INCORRECT);
   },
 
-  getUserByUsername: async function (userName: String) {
-    return await UserModel.findOne({userName: userName});
+  getUserByEmail: async function (email: String) {
+    return await UserModel.findOne({email: email});
   },
 
   logout: function (req: Request, res: Response) {

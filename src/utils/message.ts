@@ -1,6 +1,6 @@
 export enum Message {
   CATEGORY_SAVE_SUCCESFUL = 'Category saved succesfully',
-  USER_OR_PASSWORD_INCORRECT = 'username or password is incorrect',
+  USER_OR_PASSWORD_INCORRECT = 'email or password is incorrect',
   LOG_OUT_SUCCESFUL = 'Log out succeful',
   POST_NOT_FOUND = 'Post not found',
   POST_DELETE_SUCESSFUL = 'Post deleted succefully',

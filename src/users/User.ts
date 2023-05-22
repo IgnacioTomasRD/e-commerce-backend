@@ -5,7 +5,7 @@ import { RolUser } from "./Rol";
 @modelOptions({schemaOptions: {collection: "users"}})
 export class User  {  
   @prop({required: true})
-  private userName!: string;
+  private email!: string;
   @prop({required: true})
   private password!: string;
   @prop({ref: ()=>Client, required: true})
@@ -13,8 +13,8 @@ export class User  {
   @prop({enum: RolUser, required: true})
   private rol!: RolUser;
   
-  public getUserName(): string {
-    return this.userName;
+  public getEmail(): string {
+    return this.email;
   }
   public getPassword(): string {
     return this.password;

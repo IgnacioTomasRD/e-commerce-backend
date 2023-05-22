@@ -25,7 +25,8 @@ export const postController = {
     }
   },
   findAll: async function (req: Request, res: Response) {
-    const posts = await PostModel.find();
+    let posts = await PostModel.find();
+    posts = await Promise.all(posts.map(async post =>  (await (await post.populate('product')).populate('product.categories')).populate('states')));
     return res.status(200).send(posts);
   },
 
@@ -33,6 +34,7 @@ export const postController = {
     const id = req.params.id;
     const post = await PostModel.findById(new mongoose.Types.ObjectId(id));
     if (post) {
+       (await (await post?.populate('product')).populate('product.categories')).populate('states')
       res.send(post);
     } else {
       res.status(404).send(Message.POST_NOT_FOUND);
