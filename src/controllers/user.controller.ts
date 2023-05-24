@@ -16,6 +16,19 @@ const userController = {
       res.send(Message.USER_NOT_FOUND);
     }
   },
+  getUser: async function (req: Request, res: Response) {
+    const id = res.locals.userId;
+    let user = await UserModel.findById(id);
+    let client = await ClientModel.findById(user?.getClientId());
+
+    res.send({
+      userId: user?._id,
+      firstName: client?.getFirstName(),
+      lastName: client?.getLastName(),
+      isValidToken: true
+    });
+  },
+
   edit: async function (req: Request, res: Response) {
     const id = res.locals.userId;
     const updates = req.body;
@@ -56,8 +69,8 @@ async function createUserDTO(user: User) {
     const dni = client.getDni();
     const address = client.getAddress();
     return { email, password, client: { firstName, lastName, dni, birthDate, address } };
-  } else{
-    throw new Error("no se ha encontrado el cliente");
+  } else {
+    throw new Error('no se ha encontrado el cliente');
   }
 }
 

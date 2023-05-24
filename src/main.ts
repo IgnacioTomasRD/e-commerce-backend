@@ -9,14 +9,17 @@ import * as cors from 'cors';
 dotenv.config();
 const app = express();
 
-app.use(
-  cors.default({
-    origin: 'http://localhost:5173'
-  })
-);
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(
+  cors.default({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    preflightContinue: true
+  })
+);
+
 app.use(indexRouter);
 
 const init = async function (): Promise<void> {

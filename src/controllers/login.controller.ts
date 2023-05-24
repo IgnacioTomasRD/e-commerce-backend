@@ -1,6 +1,7 @@
 import { type Request, type Response } from 'express';
 import { helperCrypt } from 'helpers/crypt.helper';
 import helperJWT, { tokenBlackList } from 'helpers/jwt.helper';
+import { ClientModel } from 'model/client';
 import { UserModel } from 'users/User';
 import { Message } from 'utils/message';
 
@@ -10,8 +11,10 @@ const loginController = {
     const user = await this.getUserByEmail(email);
     if (user != null && (await helperCrypt.compare(password,user.getPassword()))) {
       const accessToken = helperJWT.generateAccessToken({ userId: user._id });
-      res.cookie('authorization', accessToken,{httpOnly: true});
-      res.status(200).send(user);
+      res.cookie('authorization', accessToken);
+      const client = await ClientModel.findById(user.getClientId());
+      const userToSend = {userId: user._id ,firstName: client?.getFirstName(), lastName: client?.getLastName()};
+      res.status(200).send(userToSend);
     } else res.status(404).send(Message.USER_OR_PASSWORD_INCORRECT);
   },
 
@@ -21,12 +24,12 @@ const loginController = {
 
   logout: function (req: Request, res: Response) {
     const token = req.cookies['authorization'];
-    if(token!= undefined)
+    if(token!== undefined)
     {
       res.clearCookie('authorization');
-      res.status(200).send(Message.LOG_OUT_SUCCESFUL);
+      res.status(200).send({status: Message.LOG_OUT_SUCCESFUL});
     } else {
-      res.status(404).send(Message.NOT_AUTHORIZED);
+      res.status(404).send({status: Message.LOG_OUT_SUCCESFUL});
     }
   }
 };
