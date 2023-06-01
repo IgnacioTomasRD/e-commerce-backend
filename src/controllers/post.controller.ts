@@ -2,14 +2,15 @@ import { DocumentType, mongoose } from '@typegoose/typegoose';
 import { Request, Response } from 'express';
 import { helperTransaction } from 'helpers/transaction.helper';
 import { Item, ItemModel } from 'model/item';
-import { PostModel } from 'model/post';
-import { PostBaseModel } from 'model/postBase';
+import { Post, PostModel } from 'model/post';
+import { PostBase, PostBaseModel } from 'model/postBase';
 import { ProductModel } from 'model/product';
 import { StatusPostModel } from 'model/PostStatus';
 import { TypeOfStatusPost } from 'model/typeOfStatusPost';
 import { UserModel } from 'users/User';
 import { Client, ClientModel } from 'model/client';
 import { Message } from 'utils/message';
+import { SIZE_PAGES } from 'utils';
 
 export const postController = {
   save: async function (req: Request, res: Response) {
@@ -25,16 +26,52 @@ export const postController = {
     }
   },
   findAll: async function (req: Request, res: Response) {
-    let posts = await PostModel.find();
-    posts = await Promise.all(posts.map(async post =>  (await (await post.populate('product')).populate('product.categories')).populate('states')));
-    return res.status(200).send(posts);
+    const offset = req.query.page? (+req.query.page - 1)*SIZE_PAGES : 0;
+    let posts = await PostModel.aggregate([
+      {$skip: offset},
+      {$limit: SIZE_PAGES},
+    ]).exec();
+    console.log("🚀 ~ file: post.controller.ts:34 ~ posts:", posts)
+    await PostModel.populate(posts,[{path: 'product'},{path:'states'}])
+    await PostModel.populate(posts,{path:'product.categories'})
+    return res.status(200).send({ length: posts.length,posts});
+  },
+
+  create: async function (req: Request, res: Response) {
+    let productId = '6467c552c95991dc3619c998';
+    let name = 'prueba';
+    let description = 'prueba'
+    let price = 10;
+    let stock = 10;
+
+    for(let i = 0; i < 70; i++) {
+      try {
+        const product = await ProductModel.findById(new mongoose.Types.ObjectId(productId));
+        const newState = await createNewState();
+        const postBase = await PostBaseModel.create({ product, name, description, price, stock, states: [newState] });
+        await postBase.save();
+        res.send('success')
+      } catch (error) {
+        console.log("🚀 ~ file: post.controller.ts:57 ~ error:", error)
+      }
+    }
+  },
+
+  delete90: async function(req: Request, res: Response){
+    try {
+      await PostModel.deleteMany();
+      console.log('Documentos borrados exitosamente.');
+    } catch (error) {
+      console.error('Error al borrar documentos:', error);
+    }
+    res.send('sucess on delete')
   },
 
   findById: async function (req: Request, res: Response) {
     const id = req.params.id;
     const post = await PostModel.findById(new mongoose.Types.ObjectId(id));
     if (post) {
-       (await (await post?.populate('product')).populate('product.categories')).populate('states')
+      (await (await post?.populate('product')).populate('product.categories')).populate('states');
       res.send(post);
     } else {
       res.status(404).send(Message.POST_NOT_FOUND);
