@@ -8,4 +8,4 @@ export function getPORT(): string {
   return process.env.PORT != null ? process.env.PORT : '3000';
 }
 
-export const SIZE_PAGES = 20;
+export const SIZE_PAGES = 7;

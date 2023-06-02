@@ -31,10 +31,10 @@ export const postController = {
       {$skip: offset},
       {$limit: SIZE_PAGES},
     ]).exec();
-    console.log("🚀 ~ file: post.controller.ts:34 ~ posts:", posts)
     await PostModel.populate(posts,[{path: 'product'},{path:'states'}])
     await PostModel.populate(posts,{path:'product.categories'})
-    return res.status(200).send({ length: posts.length,posts});
+    const pages = Math.ceil((await PostModel.countDocuments())/SIZE_PAGES);   
+    return res.status(200).send({ length: posts.length,posts,pages });
   },
 
   create: async function (req: Request, res: Response) {
