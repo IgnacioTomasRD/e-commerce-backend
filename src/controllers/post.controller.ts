@@ -26,45 +26,64 @@ export const postController = {
     }
   },
   findAll: async function (req: Request, res: Response) {
-    const offset = req.query.page? (+req.query.page - 1)*SIZE_PAGES : 0;
-    let posts = await PostModel.aggregate([
-      {$skip: offset},
-      {$limit: SIZE_PAGES},
-    ]).exec();
-    await PostModel.populate(posts,[{path: 'product'},{path:'states'}])
-    await PostModel.populate(posts,{path:'product.categories'})
-    const pages = Math.ceil((await PostModel.countDocuments())/SIZE_PAGES);   
-    return res.status(200).send({ length: posts.length,posts,pages });
+    const offset = req.query.page ? (+req.query.page - 1) * SIZE_PAGES : 0;
+    let posts = await PostModel.aggregate([{ $skip: offset }, { $limit: SIZE_PAGES }]).exec();
+    await PostModel.populate(posts, [{ path: 'product' }, { path: 'states' }]);
+    await PostModel.populate(posts, { path: 'product.categories' });
+    const pages = Math.ceil((await PostModel.countDocuments()) / SIZE_PAGES);
+    return res.status(200).send({ length: posts.length, posts, pages });
+  },
+  // TODO
+  prueba: async function (req: Request, res: Response) {
+    const query = [
+      {
+        $lookup: {
+          from: 'products', // Nombre de la tabla de productos
+          localField: 'product',
+          foreignField: '_id',
+          as: 'productInfo'
+        }
+      },
+      {
+        $match: {
+          'productInfo.name': req.body.value
+        }
+      }
+    ];
+
+    const result = await PostModel.aggregate(query);
+    console.log('🚀 ~ file: post.controller.ts:53 ~ result:', result);
+    res.send(result);
   },
 
   create: async function (req: Request, res: Response) {
     let productId = '6467c552c95991dc3619c998';
     let name = 'prueba';
-    let description = 'prueba'
+    let description = 'prueba';
     let price = 10;
     let stock = 10;
 
-    for(let i = 0; i < 70; i++) {
+    for (let i = 0; i < 70; i++) {
       try {
         const product = await ProductModel.findById(new mongoose.Types.ObjectId(productId));
         const newState = await createNewState();
         const postBase = await PostBaseModel.create({ product, name, description, price, stock, states: [newState] });
         await postBase.save();
-        res.send('success')
+        res.send('success');
       } catch (error) {
-        console.log("🚀 ~ file: post.controller.ts:57 ~ error:", error)
+        console.log('🚀 ~ file: post.controller.ts:57 ~ error:', error);
       }
     }
   },
 
-  delete90: async function(req: Request, res: Response){
+  delete90: async function (req: Request, res: Response) {
     try {
       await PostModel.deleteMany();
       console.log('Documentos borrados exitosamente.');
     } catch (error) {
       console.error('Error al borrar documentos:', error);
     }
-    res.send('sucess on delete')
+    res.send('sucess on delete');
   },
 
   findById: async function (req: Request, res: Response) {

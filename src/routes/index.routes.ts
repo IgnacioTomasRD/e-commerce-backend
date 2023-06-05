@@ -19,7 +19,6 @@ indexRouter.use(shoppingCartRouter);
 indexRouter.use(userRouter);
 indexRouter.use(transactionRouter);
 
-
 export default indexRouter;
 
 
