@@ -13,4 +13,7 @@ export enum Message {
   NOT_AUTHORIZED = 'Not authorized',
   ITEM_ADD_SUCCESFUL = 'Item added succesfully',
   POST_OR_USER_INCORRECT = 'User or Post not found',
+  CATEGORY_EDIT_SUCCESFUL = 'Category edited succesfully',
+  CATEGORY_NOT_FOUND = 'Category not found',
+  CATEGORY_DELETE_SUCCESFUL = 'Category deleted succesfully',
 }

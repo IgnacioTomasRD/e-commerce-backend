@@ -18,13 +18,15 @@ export const productController = {
   },
   save: async function (req: Request, res: Response) {
     const { name, description, categories, characteristics, imgs } = req.body;
+    console.log("🚀 ~ file: product.controller.ts:21 ~ req.body:", req.body)
     const characteristicsArray: Characteristics[]= [];
-
+    
     characteristics.forEach(async (ch: any) =>{
       // const newCharacterisct = await CharacteristicsModel.create({name: ch.name,value: ch.value})
       // await newCharacterisct.save();
       return characteristicsArray.push(new Characteristics(ch.name,ch.value));
     })
+    console.log("🚀 ~ file: product.controller.ts:23 ~ characteristicsArray:", characteristicsArray)
 
     try {
       const categoriesSelected = await getCategoriesByNames(categories);
@@ -35,9 +37,11 @@ export const productController = {
         characteristics: characteristicsArray,
         imgs
       });
+      console.log("🚀 ~ file: product.controller.ts:39 ~ newProduct:", newProduct)
       await newProduct.save();
       res.status(201).send(newProduct);
     } catch (error: any) {
+      console.log(error)
       res.status(500).send(error.message);
     }
   },

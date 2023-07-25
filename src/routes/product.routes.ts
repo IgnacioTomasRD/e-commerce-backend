@@ -4,9 +4,7 @@ import { helperAuth } from "helpers/auth.helper";
 import helperJWT from "helpers/jwt.helper";
 import { RolUser } from "users/Rol";
 
-
 const productRouter = Router();
-
 
 productRouter.get('/product',helperJWT.validateToken,helperAuth.authUser([RolUser.ADMIN]),(req,res) => productController.findAll(req,res));
 productRouter.get('/product/:id',helperJWT.validateToken,helperAuth.authUser([RolUser.ADMIN]),(req,res) => productController.findById(req,res));
